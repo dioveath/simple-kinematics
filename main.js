@@ -8,10 +8,13 @@ window.onload = function(){
   height = canvas.height = dCanvas.height = window.innerHeight;
 
   var m_fksystem = FKSystem.create(width/2, height/2);
+  var m_fksystem_2 = FKSystem.create(width/2, height/2);
+  m_fksystem_2.phase = Math.PI;
 
-  m_fksystem.addArm(100, 0);
-  m_fksystem.addArm(150, 1.2);
-  m_fksystem.addArm(90, 0.6);
+  m_fksystem.addArm(100, 70/180 * Math.PI , Math.PI / 8);
+  m_fksystem.addArm(120, 80/180 * Math.PI, 80/180 * Math.PI);
+  m_fksystem_2.addArm(100, 70/180 * Math.PI , Math.PI / 8);
+  m_fksystem_2.addArm(120, 80/180 * Math.PI, 80/180 * Math.PI);
 
   var baseAngle = 0;
 
@@ -22,20 +25,11 @@ window.onload = function(){
   function update(){
     context.clearRect(0, 0, width, height);
 
-    dContext.beginPath();
-    dContext.moveTo(m_fksystem.lastArm.getEndX(), m_fksystem.lastArm.getEndY());
-
-    m_fksystem.setPhase(baseAngle * .12, 0);
-    m_fksystem.setPhase(baseAngle * .23, 1);
-    m_fksystem.setPhase(baseAngle* .6, 2);
-
     m_fksystem.update();
-
-    baseAngle += 0.1;
+    m_fksystem_2.update();
 
     m_fksystem.render(context);
-    dContext.lineTo(m_fksystem.lastArm.getEndX(), m_fksystem.lastArm.getEndY());
-    dContext.stroke();
+    m_fksystem_2.render(context);
     requestAnimationFrame(update);
   }
 

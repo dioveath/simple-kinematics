@@ -4,15 +4,20 @@ var arm = arm || {
   y: 0,
   length: 100,
   angle: 0,
+  centerAngle: 0,
+  rotationRange: Math.PI / 4,
   parent: null,
 
-  create: function(x, y, length, angle){
+  create: function(length, centerAngle, rotationRange){
     var obj = Object.create(this);
-    obj.x = x;
-    obj.y = y;
     obj.length = length;
-    obj.angle = angle;
+    obj.centerAngle = centerAngle;
+    obj.rotationRange = rotationRange;
     return obj;
+  },
+
+  setPhase: function(phase){
+    this.angle = this.centerAngle + Math.sin(phase) * this.rotationRange;
   },
 
   getEndX: function(){
@@ -34,6 +39,7 @@ var arm = arm || {
     }
     return this.y + Math.sin(angle) * this.length;
   },
+
 
   render: function(context){
     context.beginPath();

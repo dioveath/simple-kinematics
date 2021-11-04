@@ -4,6 +4,8 @@ var FKSystem = FKSystem || {
   y: 0,
   arms: null,
   lastArm: null,
+  phase: 0,
+  speed: 0.05,
 
 
   create: function(x, y){
@@ -19,26 +21,26 @@ var FKSystem = FKSystem || {
     this.lastArm = null;
   },
 
-  addArm: function(length, angle){
-    var m_arm;
-    if(this.lastArm == null){
-      m_arm = arm.create(this.x, this.y, length, angle);
-      this.arms.push(m_arm);
-    } else {
-      m_arm = arm.create(this.lastArm.getEndX(), this.lastArm.getEndY(), length, angle);
-      this.arms.push(m_arm);
-    }
+  addArm: function(length, centerAngle, rotationRange){
+    var m_arm = arm.create(length, centerAngle, rotationRange);
     m_arm.parent = this.lastArm;
+    this.arms.push(m_arm);
     this.lastArm = m_arm;
+    this.update();
   },
 
   update: function(){
     for(var i = 0; i < this.arms.length; i++){
+      this.arms[i].setPhase(this.phase);
       if(this.arms[i].parent != null){
         this.arms[i].x = this.arms[i].parent.getEndX();
         this.arms[i].y = this.arms[i].parent.getEndY();
+      } else {
+        this.arms[i].x = this.x;
+        this.arms[i].y = this.y;
       }
     }
+    this.phase += this.speed;
   },
 
   render: function(context){
@@ -47,8 +49,8 @@ var FKSystem = FKSystem || {
     }
   },
 
-  setPhase: function(phase, index){
-    this.arms[index].angle = phase;
+  rotateArm: function(index, angle){
+    this.arms[index].angle = angle;
   }
 
 
